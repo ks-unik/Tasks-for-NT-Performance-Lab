@@ -6,18 +6,13 @@ if len(sys.argv) < 2:
     sys.exit(1)
 filename = sys.argv[1]
 with open(filename, "r") as f:
-    line = f.readline()
-    numbers = [int(x) for x in line.replace(",", " ").split()]
+    numbers = [int(line.strip()) for line in f if line.strip()]
 median = statistics.median(numbers)
-print(median) 
 key_number = min(numbers, key=lambda x: abs(x - median))
-print(key_number)
-total = 0
-sums_diff = []
-for el in numbers:
-    diff = abs(key_number-el)
-    total += diff
-    print(total)
-print(total)
+
+total = sum(abs(key_number - x) for x in numbers)
+
 if total > 20:
-    print("«20 ходов недостаточно для приведения всех элементов массива к одному числу»")
+    print("20 ходов недостаточно для приведения всех элементов массива к одному числу")
+else:
+    print(total)
