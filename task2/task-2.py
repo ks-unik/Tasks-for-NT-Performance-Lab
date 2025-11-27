@@ -1,4 +1,3 @@
-from sympy import symbols, Ellipse, Point, simplify
 import sys
 import re
 
@@ -17,16 +16,14 @@ filename_2 = sys.argv[2]
 with open(filename_2, "r") as coordinates_file:
     coordinates_list = [float(x) for x in re.split(r'\s+', coordinates_file.read()) if x]
 
-ellipse_obj = Ellipse(center=(x_center, y_center), hradius=radius_a, vradius=radius_b)
-ellipse_expr = ((symbols("x") - x_center)**2 / radius_a**2 + (symbols("y") - y_center)**2 / radius_b**2 - 1)
-
-x, y = symbols("x y")
+if len(coordinates_list) % 2 != 0:
+    raise ValueError("Неверное количество координат: должно быть чётное число значений")
 
 for k in range(0, len(coordinates_list), 2):
     px, py = coordinates_list[k], coordinates_list[k+1]
-    point_value = ellipse_expr.subs({x: px, y: py}).evalf()
+    point_value = ((px - x_center)**2) / radius_a**2 + ((py - y_center)**2) / radius_b**2 - 1
 
-    if point_value == 0:
+    if point_value < 1e-9:
         print(0) 
     elif point_value < 0:
         print(1) 
