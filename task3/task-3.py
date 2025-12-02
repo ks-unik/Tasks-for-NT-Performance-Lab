@@ -1,6 +1,12 @@
 import json
 import sys
 
+def build_index(obj_list, index):
+    for obj in obj_list:
+        index[obj["id"]] = obj
+        if "values" in obj:
+            build_index(obj["values"], index)
+
 if len(sys.argv) < 4:
     print("Необходимо указать 3 файла")
     sys.exit(1)
@@ -16,6 +22,7 @@ with open(filename_2, 'r') as f:
     tests_json = json.load(f)
 
 index_values = {obj["id"]: obj for obj in values_json["values"]}
+
 
 def fill_values(obj_list, index):
     for obj in obj_list:
